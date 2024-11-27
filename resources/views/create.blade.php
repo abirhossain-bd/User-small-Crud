@@ -23,7 +23,7 @@
 
                           <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">New User Create</p>
 
-                          <form action="{{ url('user/store') }}" method="POST" class="mx-1 mx-md-4">
+                          <form action="{{ route('user.store_normally') }}" method="POST" class="mx-1 mx-md-4">
                             @csrf
 
                             <div class="d-flex flex-row align-items-center mb-4">

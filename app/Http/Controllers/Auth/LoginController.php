@@ -14,7 +14,7 @@ class LoginController extends Controller
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $request->session()->regenerate();
-            return redirect('user/list');
+            return redirect()->route('user.list');
         }else{
             dd('Credential does not match!');
         }

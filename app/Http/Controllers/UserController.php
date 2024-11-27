@@ -10,11 +10,15 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
+
         if(!Auth::user()){
             return redirect('/');
         }
         $users = User::all();
+        if ($request->ajax()) {
+            return view('ajax_list',compact('users'));
+        }
         return view('list',compact('users'));
     }
 
@@ -22,11 +26,13 @@ class UserController extends Controller
         if(!Auth::user()){
             return redirect('/');
         }
+
         return view('create');
     }
 
 
     public function store(Request $request){
+
         User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -36,7 +42,22 @@ class UserController extends Controller
             'gender' => $request->gender,
             'created_at' =>now(),
         ]);
-        return redirect('user/list');
+        return response()->json(['success'=>true]);
+
+    }
+    public function store_normally(Request $request){
+
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'mobile' => $request->mobile,
+            'gender' => $request->gender,
+            'created_at' =>now(),
+        ]);
+        return redirect()->route('user.list');
+
     }
 
 
@@ -59,7 +80,7 @@ class UserController extends Controller
             'gender' => $request->gender,
             'updated_at' =>now(),
         ]);
-        return redirect('user/list');
+        return redirect()->route('user.list');
     }
 
     public function delete($id){
@@ -67,12 +88,25 @@ class UserController extends Controller
             return redirect('/');
         }
         User::find($id)->delete();
-        return redirect('user/list');
+        return redirect()->route('user.list');
+    }
+
+    public function destroy(Request $request){
+        if(!Auth::user()){
+            return redirect('/');
+        }
+        User::find($request->id)->delete();
+        return response()->json(['success'=>true]);
     }
 
     public function show($id){
         $show = User::where('id',$id)->get();
         dd($show->toArray());
+    }
+
+
+    public function ajaxCall(Request $request){
+        return response()->json(['message'=>'Ajax Call success', 'status' => 'Success']);
     }
 }
 

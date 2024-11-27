@@ -28,11 +28,14 @@ Route::get('/logout',[LoginController::class,'logout']);
 
 
 Route::prefix('/user/')->group(function(){
-    Route::get('list/',[UserController::class,'index']);
+    Route::get('list/',[UserController::class,'index'])->name('user.list');
     Route::get('create/',[UserController::class,'create']);
-    Route::post('store/',[UserController::class,'store']);
+    Route::post('store_normally/',[UserController::class,'store_normally'])->name('user.store_normally');
+    Route::post('store/',[UserController::class,'store'])->name('user.store');
     Route::get('edit/{id}',[UserController::class,'edit']);
     Route::post('update/{id}',[UserController::class,'update']);
     Route::get('delete/{id}',[UserController::class,'delete']);
+    Route::get('destroy',[UserController::class,'destroy'])->name('user.destroy');
     Route::get('{id}',[UserController::class,'show']);
+    Route::post('ajax/post',[UserController::class,'ajaxCall'])->name('ajax.post');
 });
